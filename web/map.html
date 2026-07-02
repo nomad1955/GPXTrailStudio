@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="utf-8">
+
+<title>GPX Trail Studio</title>
+
+<link rel="stylesheet" href="leaflet/leaflet.css">
+
+<style>
+
+html,
+body,
+#map{
+
+    width:100%;
+    height:100%;
+
+    margin:0;
+    padding:0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script src="leaflet/leaflet.js"></script>
+
+<script>
+
+console.log("Leaflet Version :",L.version);
+
+//-------------------------------------------------
+
+const map = L.map("map");
+
+L.tileLayer(
+
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+    {
+
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
+
+    }
+
+).addTo(map);
+
+map.setView([37.5665,126.9780],12);
+
+//-------------------------------------------------
+
+let gpxPolyline = null;
+
+let startMarker = null;
+
+let finishMarker = null;
+
+let currentMarker = null;
+
+//-------------------------------------------------
+
+function clearTrack(){
+
+    if(gpxPolyline){
+
+        map.removeLayer(gpxPolyline);
+        gpxPolyline=null;
+    }
+
+    if(startMarker){
+
+        map.removeLayer(startMarker);
+        startMarker=null;
+    }
+
+    if(finishMarker){
+
+        map.removeLayer(finishMarker);
+        finishMarker=null;
+    }
+
+    if(currentMarker){
+
+        map.removeLayer(currentMarker);
+        currentMarker=null;
+    }
+
+}
+
+//-------------------------------------------------
+
+function showTrack(points){
+
+    clearTrack();
+
+    if(points.length<2)
+        return;
+
+    gpxPolyline=L.polyline(
+
+        points,
+
+        {
+
+            color:"#0066ff",
+            weight:4
+
+        }
+
+    ).addTo(map);
+
+    startMarker=L.circleMarker(
+
+        points[0],
+
+        {
+
+            radius:6,
+            color:"green",
+            fillColor:"green",
+            fillOpacity:1
+
+        }
+
+    ).addTo(map);
+
+    finishMarker=L.circleMarker(
+
+        points[points.length-1],
+
+        {
+
+            radius:6,
+            color:"red",
+            fillColor:"red",
+            fillOpacity:1
+
+        }
+
+    ).addTo(map);
+
+    currentMarker=L.circleMarker(
+
+        points[0],
+
+        {
+
+            radius:7,
+            color:"#0040ff",
+            fillColor:"#00bfff",
+            fillOpacity:1
+
+        }
+
+    ).addTo(map);
+
+    map.fitBounds(gpxPolyline.getBounds());
+
+    console.log("Track Draw :",points.length);
+
+}
+
+//-------------------------------------------------
+
+function moveMarker(lat,lon){
+
+    if(currentMarker==null){
+
+        currentMarker=L.circleMarker(
+
+            [lat,lon],
+
+            {
+
+                radius:7,
+                color:"#0040ff",
+                fillColor:"#00bfff",
+                fillOpacity:1
+
+            }
+
+        ).addTo(map);
+
+    }
+
+    currentMarker.setLatLng([lat,lon]);
+
+}
+
+console.log("Map Ready");
+
+</script>
+
+</body>
+
+</html>
