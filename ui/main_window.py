@@ -12,7 +12,7 @@ from core.statistics import GPXStatistics
 from ui.info_panel import InfoPanel
 from ui.map_widget import MapWidget
 from chart.elevation_chart import ElevationChart
-
+from ui.statistics_panel import StatisticsPanel
 
 class MainWindow(QMainWindow):
 
@@ -64,6 +64,10 @@ class MainWindow(QMainWindow):
         self.map_widget = MapWidget()
 
         self.chart = ElevationChart()
+
+        self.statistics = StatisticsPanel()
+
+        self.statusBar().showMessage("준비 완료")
 
         # ★ 고도표 → 지도 연동
         self.chart.pointHovered.connect(

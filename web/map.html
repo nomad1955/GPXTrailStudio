@@ -192,6 +192,10 @@ function moveMarker(lat,lon){
     }
 
     currentMarker.setLatLng([lat,lon]);
+    map.panTo([lat, lon], {
+        animate: true,
+        duration: 0.15
+    });
 
 }
 
